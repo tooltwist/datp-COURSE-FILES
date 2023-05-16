@@ -138,11 +138,10 @@ CREATE TABLE `atp_node_group` (
 --
 
 INSERT INTO `atp_node_group` (`node_group`, `description`, `host_mondat_webapp`, `serve_mondat_api`, `eventloop_workers`, `num_workers`, `eventloop_pause_busy`, `eventloop_pause_idle`, `eventloop_pause`, `webhook_processing`, `webhook_workers`, `webhook_pause`, `webhook_pause_busy`, `webhook_pause_idle`, `archive_processing`, `archive_batch_size`, `archive_pause`, `archive_pause_idle`, `wakeup_processing`, `wakeup_pause`, `sloth_mode_delay`, `debug_scheduler`, `debug_workers`, `debug_steps`, `debug_pipelines`, `debug_routers`, `debug_longpolling`, `debug_webhooks`, `debug_transactions`, `debug_transaction_cache`, `debug_redis`, `debug_db`) VALUES
-('archiver', 'Persist transaction states to database', 0, 0, 0, 0, 20, 20, 5, 1, 0, 0, 0, 0, 1, 1000, 5000, 5000, 1, 30, 5000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-('master', 'Main application contact point', 1, 1, 100, 100, 20, 20, 5, 1, 0, 0, 0, 0, 1, 0, 500, 0, 1, 30, 5000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-('slave1', 'Test slave', 0, 0, 100, 100, 20, 20, 5, 1, 0, 0, 0, 0, 1, 0, 500, 0, 1, 30, 5000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-('slave2', 'Test slave', 0, 0, 100, 100, 20, 20, 5, 1, 0, 0, 0, 0, 1, 0, 500, 0, 1, 30, 5000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-('webhooks', 'Process webhooks', 0, 0, 0, 0, 20, 20, 5, 1, 200, 50, 50, 1000, 1, 0, 500, 0, 1, 30, 5000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+('admin', 'Nodes to handle admin functions', 1, 1, 0, 100, 20, 20, 5, 1, 200, 50, 50, 1000, 1, 100, 500, 5000, 1, 10000, 5000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+('master', 'Main application contact point', 1, 1, 100, 100, 20, 20, 5, 1, 200, 50, 50, 1000, 1, 100, 500, 5000, 1, 10000, 5000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+('slave1', 'Test slave', 0, 0, 100, 100, 20, 20, 5, 0, 0, 0, 0, 0, 0, 0, 500, 0, 0, 10000, 5000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+('slave2', 'Test slave', 0, 0, 100, 100, 20, 20, 5, 0, 0, 0, 0, 0, 0, 0, 500, 0, 0, 10000, 5000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -176,7 +175,6 @@ INSERT INTO `atp_pipeline` (`name`, `version`, `node_name`, `description`, `step
 ('example', 'f75740c1246cf100d6d7a0941ec3c041e3885b4c', NULL, NULL, '[{\"definition\":{\"message\":\"Rainy outside :-(\",\"stepType\":\"util/fixed-reply\",\"description\":\"Return a fixed reply\"},\"description\":\"Return a fixed reply\"}]', 'This is an example pipeline, to show how pipelines are defined.', 'inactive', '[{\"ts\":\"2022-03-03T15:44:51.372Z\",\"v\":\"f75740c1246cf100d6d7a0941ec3c041e3885b4c\",\"c\":\"h2\"},{\"ts\":\"2022-03-03T14:34:00.211Z\",\"v\":\"e109954c7a6a23d80285a3aeb5228334527d90d7\",\"c\":\"Unhappy message.\"},{\"ts\":\"2022-03-03T14:25:52.724Z\",\"v\":\"999f51b1346375e22bb8a1fb4dbd50c312cb1dd8\",\"c\":\"Return a happy message.\"}]', NULL),
 ('example.sleeper', '1.0', 'master', 'Example pipeline that sleeps for ten to fifteen seconds.', '[\r\n  {\r\n    \"id\": 0,\r\n    \"definition\": {\r\n      \"min\": 10000,\r\n      \"max\": 15000,\r\n      \"stepType\": \"util/delay\",\r\n      \"description\": \"Delay a random period of time\"\r\n    }\r\n  }\r\n]', '', 'active', NULL, NULL),
 ('example.sleeper', '1.1', 'master', 'Example pipeline that sleeps for ten to fifteen seconds.', '[\r\n  {\r\n    \"id\": 0,\r\n    \"definition\": {\r\n      \"min\": 10000,\r\n      \"max\": 15000,\r\n      \"stepType\": \"util/delay\",\r\n      \"description\": \"Delay a random period of time\"\r\n    }\r\n  }\r\n]', 'This is an example pipeline only. Do not use for actual transactions, as it might change.', 'active', '[ { \"message\": \"This is a test commit\" } ]', 'test,delayed'),
-('myPipeline', 'draft', NULL, NULL, '[{\"definition\":{\"msg\":\"Hello World 1\",\"stepType\":\"example/saySomething\",\"description\":\"Display a message to the console\"},\"description\":\"Display a message to the console\",\"stepType\":\"example/saySomething\"},{\"definition\":{\"description\":\"Test sleeping\",\"stepType\":\"myProject/mySleepingStep\"}},{\"definition\":{\"description\":\"Just a test step\",\"stepType\":\"myProject/myFirstStep\"}},{\"definition\":{\"msg\":\"Hello World 2\",\"stepType\":\"example/saySomething\",\"description\":\"Display a message to the console\"},\"description\":\"Display a message to the console\",\"stepType\":\"example/saySomething\"},{\"definition\":{\"returnError\":false,\"note\":\"Good afternoon\",\"reply\":{\"message\":\"Have a nice day\"},\"stepType\":\"util/fixed-reply\",\"description\":\"Return a fixed reply\"},\"description\":\"Return a fixed reply\"}]', '', 'draft', '[{\"ts\":\"2023-05-10T16:19:57.136Z\",\"v\":\"draft\",\"m\":\"draft version\"}]', NULL),
 ('not-supported', '1.0', 'master', 'Return a \"not supported\" message', '[\n  {\n    \"id\": 0,\n    \"definition\": {\n      \"returnError\": false,\n      \"note\": \"Not supported\",\n      \"reply\": {\n        \"message\": \"Operation not supported\"\n      },\n      \"stepType\": \"util/fixed-reply\",\n      \"description\": \"Return fixed reply \\\"not supported\\\"\"\n    }\n  }\n]', NULL, 'active', NULL, NULL),
 ('null', '1.0', 'master', 'Do nothing', '[\r\n  {\r\n    \"id\": 1,\r\n    \"definition\": {\r\n      \"min\": 5,\r\n      \"max\": 10,\r\n      \"stepType\": \"util/delay\",\r\n      \"description\": \"Sleep an insignificant amount of time\"\r\n    }\r\n  }\r\n]', 'This is an example pipeline, to show how pipelines are defined.', 'active', NULL, NULL),
 ('null', 'draft', 'master', NULL, '[{\"definition\":{\"min\":0,\"max\":1,\"forceDeepSleep\":false,\"stepType\":\"util/delay\",\"description\":\"Sleep an insignificant amount of time\"},\"description\":\"Sleep an insignificant amount of time\",\"stepType\":\"util/delay\"}]', 'This is an example pipeline, to show how pipelines are defined.', 'active', '[{\"ts\":\"2022-07-21T13:33:38.878Z\",\"v\":\"draft\",\"m\":\"draft version\"}]', NULL),
@@ -300,13 +298,6 @@ CREATE TABLE `atp_transaction_delta` (
 --
 
 INSERT INTO `atp_transaction_delta` (`transaction_id`, `sequence`, `owner`, `step_id`, `data`, `event_time`, `log_time`) VALUES
-('tx-045574558eaa207916f776f457c4725e36363f88', 1, 'acme', 's-f9382c4d0f27366c8a624f6f807e25d0f2537dc0', '{\"vogPath\":\"045574=null\",\"vogI\":0,\"vogP\":null,\"stepDefinition\":\"null\",\"level\":0,\"fullSequence\":\"045574\",\"status\":\"initial\"}', '2023-05-01 01:34:22.081', '2023-05-01 01:34:22.121'),
-('tx-045574558eaa207916f776f457c4725e36363f88', 2, 'acme', 's-f9382c4d0f27366c8a624f6f807e25d0f2537dc0', '{\"stepDefinition\":\"null\"}', '2023-05-01 01:34:22.138', '2023-05-01 01:34:22.138'),
-('tx-28d237f913c866224524c386dd0760445a8104f6', 1, 'acme', 's-05857e60cb9699b658775d0b785f911ed444d25c', '{\"vogPath\":\"28d237=null\",\"vogI\":0,\"vogP\":null,\"stepDefinition\":\"null\",\"level\":0,\"fullSequence\":\"28d237\",\"status\":\"initial\"}', '2023-04-29 11:52:38.683', '2023-04-29 11:52:38.721'),
-('tx-28d237f913c866224524c386dd0760445a8104f6', 2, 'acme', 's-05857e60cb9699b658775d0b785f911ed444d25c', '{\"stepDefinition\":\"null\"}', '2023-04-29 11:52:38.780', '2023-04-29 11:52:38.781'),
-('tx-3cad8cddb4a9db268d1ce8e40d0c76cfc454b3da', 1, 'acme', 's-fc5fecbc8f0a8927b8adbdcbd818123088a1ebee', '{\"vogPath\":\"3cad8c=null\",\"vogI\":0,\"vogP\":null,\"stepDefinition\":\"null\",\"level\":0,\"fullSequence\":\"3cad8c\",\"status\":\"initial\"}', '2023-05-01 01:48:44.574', '2023-05-01 01:48:44.603'),
-('tx-3cad8cddb4a9db268d1ce8e40d0c76cfc454b3da', 2, 'acme', 's-fc5fecbc8f0a8927b8adbdcbd818123088a1ebee', '{\"stepDefinition\":\"null\"}', '2023-05-01 01:48:44.611', '2023-05-01 01:48:44.613'),
-('tx-b6b166876da7d11ced43b87734a5c403e3f9a7fe', 1, 'acme', 's-d4bfe13934ffa155a9fbab52050edbaa6f22c4d7', '{\"vogPath\":\"b6b166=null\",\"vogI\":0,\"vogP\":null,\"stepDefinition\":\"null\",\"level\":0,\"fullSequence\":\"b6b166\",\"status\":\"initial\"}', '2023-05-01 01:49:33.903', '2023-05-01 01:49:33.923'),
 ('tx-b6b166876da7d11ced43b87734a5c403e3f9a7fe', 2, 'acme', 's-d4bfe13934ffa155a9fbab52050edbaa6f22c4d7', '{\"stepDefinition\":\"null\"}', '2023-05-01 01:49:33.932', '2023-05-01 01:49:33.933');
 
 -- --------------------------------------------------------
@@ -371,9 +362,8 @@ CREATE TABLE `atp_transaction_type` (
 --
 
 INSERT INTO `atp_transaction_type` (`transaction_type`, `is_transaction_type`, `description`, `pipeline_version`, `node_group`, `notes`, `pipeline_name`) VALUES
-('example', 1, 'Example pipeline', 'draft', 'slave1', 'This is an example pipeline\nused to test stuff. We hope you like it.\n', 'example'),
+('example', 1, 'Example pipeline', 'draft', 'master', 'This is an example pipeline\nused to test stuff. We hope you like it.\n', 'example'),
 ('example.sleeper', 1, 'Goes to sleep for 10 - 15 seconds, which is useful for showing polling and status changes.', '1.0', 'master', NULL, 'example.sleeper'),
-('myPipeline', 1, 'My tutorial pipeline', 'draft', 'master', '', 'myPipeline'),
 ('not-supported', 1, 'Return a \"not supported\" message', '1.0', 'master', NULL, 'not-supported'),
 ('null', 1, 'Do nothing', 'draft', 'master', NULL, 'null'),
 ('test-longrun', 1, 'Pipeline takes 2 minutes to complete', 'draft', 'master', '', 'test-longrun'),
@@ -1416,7 +1406,6 @@ CREATE TABLE `m_test_case` (
 INSERT INTO `m_test_case` (`name`, `description`, `transaction_type`, `input_data`) VALUES
 ('example.sleeper', 'Test sleep functionality', 'example.sleeper', '{\n  \"metadata\": {\n    \"reply\": \"longpoll\"\n  },\n  \"data\": {\n    \"delay\": 15000\n  }\n}'),
 ('master-slave', 'Test master / slave routing', 'test-master', '{\n  \"metadata\": {\n    \"reply\": \"shortpoll\"\n  },\n  \"data\": {}\n}'),
-('myPipeline', 'My first pipeline', 'myPipeline', '{\n  \"metadata\": {\n    \"reply\": \"shortpoll\"\n  },\n  \"data\": {}\n}'),
 ('null', 'Do nothing', 'null', '{\n  \"metadata\": {\n    \"reply\": \"longpoll\",\n    \"Zwebhook\": \"http://localhost:3030/webhook\",\n    \"ZexternalId\": \"123000123\"\n  },\n  \"data\": {\n    \"afield\": \"xyz\"\n  }\n}'),
 ('test-longrun', 'Test pipeline(s) that take 2 minutes to run (i.e.in a  \"stuck\" step)', 'test-longrun-parent', '{\n  \"metadata\": {\n    \"reply\": \"shortpoll\"\n  },\n  \"data\": {}\n}'),
 ('test-longsleep', 'Test DATP scheduled sleeps', 'test-longsleep', '{\n  \"metadata\": {\n    \"reply\": \"shortpoll\"\n  },\n  \"data\": {}\n}'),

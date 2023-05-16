@@ -42,7 +42,7 @@
     },
     "files.exclude": {
       ".volumes_to_speed_up_vscode": true,
-      "/MONDAT/**": true,
+      "**/.nuxt": true,
       "**/node_modules": true
     },
     "search.exclude": {

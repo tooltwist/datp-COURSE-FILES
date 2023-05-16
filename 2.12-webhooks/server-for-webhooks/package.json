@@ -1,0 +1,17 @@
+{
+  "name": "example-server-for-webhooks",
+  "version": "1.0.0",
+  "description": "Server to receive test webhook callbacks",
+  "ztype": "module",
+  "main": "server.js",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "dev": "node -r esm server.js",
+    "start": "node -r esm server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.2"
+  }
+}
