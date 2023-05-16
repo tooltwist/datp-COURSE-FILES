@@ -1,0 +1,9 @@
+{
+  "name": "loadtest",
+  "version": "1.0.0",
+  "main": "loadtest-1.js",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "autocannon": "^7.11.0"
+  }
+}

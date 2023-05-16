@@ -1,0 +1,13 @@
+#!/bin/sh
+# Start the Master server
+PROJECTDIR=$(cd $(dirname $0)/..; pwd)
+
+export JUICE_CONFIG=file:::${PROJECTDIR}/util-vsc/config-master.json
+echo "JUICE_CONFIG=${JUICE_CONFIG}"
+
+echo "cd ${PROJECTDIR}"
+      cd ${PROJECTDIR}
+#echo "node -r esm app.js"
+#      node -r esm app.js
+echo "npm run vsc-dev"
+      npm run vsc-dev

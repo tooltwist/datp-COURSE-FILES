@@ -1,0 +1,5 @@
+ROOT=$(cd $(dirname $0)/../..; pwd)
+echo "cd ${ROOT}/mondat"
+      cd ${ROOT}/mondat
+echo "yarn install && yarn dev"
+      yarn install && yarn dev
