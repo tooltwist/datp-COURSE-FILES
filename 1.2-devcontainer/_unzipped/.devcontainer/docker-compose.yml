@@ -1,0 +1,53 @@
+version: '3.7'
+
+x-environment:
+    &default-environment
+    JUICE_CONFIG: file:::/workspace/running-in-vsc/datp-config.json
+
+services:
+    app:
+        build:
+            context: ..
+            dockerfile: .devcontainer/Dockerfile.ubuntu
+        environment:
+            <<: *default-environment
+            PORT: 33380
+        ports:
+            # Mondat with Live reload
+            - 33380:33380
+            - 24678:24678
+            # DATP
+            - 33370:33370
+        # See https://spin.atomicobject.com/2019/10/14/docker-slow-mounted-volumes/
+        tty: true
+        volumes:
+            - ..:/workspace
+            - .volumes_to_speed_up_vscode/MONDAT_node_modules:/workspace/MONDAT/node_modules
+            - .volumes_to_speed_up_vscode/MONDAT_dot_nuxt:/workspace/MONDAT/.nuxt
+            #- .volumes_to_speed_up_vscode/DATP_node_modules:/workspace/DATP/node_modules
+            - .volumes_to_speed_up_vscode/myProject_node_modules:/workspace/myProject/node_modules
+        user: vscode
+        command: sleep infinity
+
+    db:
+      image: library/mysql:5.7
+      platform: linux/x86_64
+      ports:
+        - "33350:3306"
+      environment:
+        HOME: /root
+        MYSQL_ROOT_PASSWORD:
+        MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+
+    phpmyadmin:
+      image: phpmyadmin/phpmyadmin
+      platform: linux/x86_64
+      ports:
+        - "33360:80"
+      links:
+        - db
+
+    redis:
+      image: redis:6.2
+      ports:
+        - "33390:6379"

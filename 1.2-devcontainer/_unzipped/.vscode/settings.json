@@ -1,0 +1,54 @@
+{
+  "files.eol": "\n",
+  "terminal.integrated.profiles.linux": {
+    "zsh (login)": {
+      "path": "zsh",
+      "args": ["-l"]
+    },
+    "MASTER": {
+      "path": "bash",
+      "args": ["-c", "myProject/util-vsc/dev-master"]
+    },
+    "MONDAT": {
+      "path": "bash",
+      "args": ["-c", "myProject/util-vsc/dev-mondat"]
+    }
+  },
+  "terminal.integrated.defaultProfile.linux": "bash",
+
+  "terminal.integrated.profiles.windows": {
+    "PowerShell": {
+      "source": "PowerShell",
+      "icon": "terminal-powershell"
+    },
+    "Command Prompt": {
+      "path": [
+        "${env:windir}\\Sysnative\\cmd.exe",
+        "${env:windir}\\System32\\cmd.exe"
+      ],
+      "args": [],
+      "icon": "terminal-cmd"
+    },
+    "GitBash": {
+      "source": "Git Bash",
+      "path": ["C:\\Program Files\\Git\\bin\\bash.exe"],
+      "icon": "terminal-bash"
+    }
+  },
+  "terminal.integrated.defaultProfile.windows": "GitBash",
+
+    "variables": {
+
+    },
+    "files.exclude": {
+      ".volumes_to_speed_up_vscode": true,
+      "/MONDAT/**": true,
+      "**/node_modules": true
+    },
+    "search.exclude": {
+      ".volumes_to_speed_up_vscode": true,
+      "/MONDAT/**": true,
+      "**/.nuxt": true,
+      "**/node_modules": true
+    }
+}

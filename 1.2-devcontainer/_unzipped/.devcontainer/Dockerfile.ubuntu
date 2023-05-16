@@ -1,0 +1,59 @@
+FROM ubuntu:20.04
+
+RUN echo hello 1
+
+ARG USERNAME=vscode
+ARG USER_UID=1000
+ARG USER_GID=$USER_UID
+
+# Ensure apt is in non-interactive mode to avoid prompts
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Install dependencies and useful stuff.
+RUN apt-get -y update --no-install-recommends \
+    && apt-get -y install --no-install-recommends \
+    build-essential \
+    curl \
+    ca-certificates \
+    apt-utils \
+    dialog \
+    git \
+    vim \
+    ssh \
+    && apt-get autoremove -y \
+    && apt-get clean -y
+
+# Add Node.js repository.
+RUN curl -sL https://deb.nodesource.com/setup_16.x | bash -
+
+# Install Node.js.
+RUN apt-get -y update --no-install-recommends \
+    && apt-get -y install --no-install-recommends nodejs \
+    && apt-get autoremove -y \
+    && apt-get clean -y
+
+RUN npm config set unsafe-perm true
+RUN npm install -g yarn
+RUN yarn global add sass-migrator nodemon
+
+RUN apt-get -y install curl
+RUN apt-get -y install sudo
+
+# Install Datadog
+#RUN DD_AGENT_MAJOR_VERSION=7 DD_API_KEY=xxxx39e5dfxxxx892e6eb10cd019xxxx DD_SITE="datadoghq.com" bash -c "$(curl -L https://s3.amazonaws.com/dd-agent/scripts/install_script.sh)"
+
+# Create the user.
+# See https://code.visualstudio.com/remote/advancedcontainers/add-nonroot-user
+RUN groupadd --gid $USER_GID $USERNAME \
+    && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME \
+    && apt-get install -y sudo \
+    && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
+    && chmod 0440 /etc/sudoers.d/$USERNAME
+
+ENV DEBIAN_FRONTEND=dialog
+
+EXPOSE 33370
+EXPOSE 33380
+EXPOSE 33410
+
+USER $USERNAME
