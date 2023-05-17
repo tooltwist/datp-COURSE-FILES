@@ -2,7 +2,6 @@ import DATP, { schedulerForThisNode } from '@tooltwist/datp'
 import { addRoute } from '@tooltwist/datp/extras'
 import MyFirstStep from './steps/MyFirstStep'
 
-
 const MYPROJECT_PREFIX = 'myProject'
 
 /*

@@ -1,6 +1,7 @@
-import DATP, { schedulerForThisNode } from '@tooltwist/datp'
+import DATP from '@tooltwist/datp'
 import { addRoute } from '@tooltwist/datp/extras'
 import MyFirstStep from './steps/MyFirstStep'
+import MySleepingStep from './steps/MySleepingStep'
 import { myPipelineRouteV1 } from './routes/myFirstPipelineRoute';
 
 const MYPROJECT_PREFIX = 'myProject'
@@ -44,10 +45,11 @@ async function middlewareToVerifyTenant(req, res, next) {
 
   // Register our steps
   await MyFirstStep.register()
+  await MySleepingStep.register()
 
   // Start the server
   await DATP.goLive(server)
-  console.log(`Node ${schedulerForThisNode.getNodeId()} is ready for use.`)
+  console.log(`Node is ready for use.`)
 
 })().catch(e => {
   console.error(e)

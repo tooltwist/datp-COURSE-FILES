@@ -25,10 +25,10 @@ app.get('/status/:txId', (req, res) => {
 })
 
 
-// Route for our UI to ask for the transaction status, by external
-app.get('/statusByCustomerRef/:customerRef', (req, res) => {
+// Route for our UI to ask for the transaction status, by externalId
+app.get('/statusByExternalId/:customerRef', (req, res) => {
   const customerRef = req.params.customerRef
-  console.log(`\n/statusByCustomerRef/${customerRef}`)
+  console.log(`\n/statusByExternalId/${customerRef}`)
   const status = summaryByExternalId[customerRef] ? summaryByExternalId[customerRef] : { metadata: { status: 'not available' } }
   return res.send(status);
 })
@@ -39,19 +39,25 @@ app.post('/notify', (req, res) => {
   console.log(`\n/notify`)
 
   const summary = req.body
-  console.log(`summary=`, summary)
 
   summaryByTxId[summary.metadata.txId] = summary
   if (summary.metadata.externalId) {
     summaryByExternalId[summary.metadata.externalId] = summary
   }
-  console.log(`Web hook: Received status of transaction ${summary.metadata.txId}`)
+  console.log(``)
+  console.log(`Web hook: Received status of transaction ${summary.metadata.txId}:`)
+  console.log(summary)
+  // console.log(`You can view this status at http://localhost:${PORT}/status/${summary.metadata.txId}`)
+
   return res.send({ status: 'ok' });
 })
 
 
 // Start the server
 const PORT = 33340
-app.listen(PORT, '0.0.0.0', () =>
-  console.log(`ACME Corporation (mock) server listening on port ${PORT}`),
-)
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`ACME Corporation (mock) server listening on port ${PORT}`)
+  console.log(`    Send webhook replies to http://localhost:${PORT}/notify`)
+  console.log(`    View a reply at http://localhost:${PORT}/status/{txId}`)
+  console.log(`                 or http://localhost:${PORT}/statusByExternalId/{externalId}`)
+})
